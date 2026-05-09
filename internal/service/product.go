@@ -18,4 +18,5 @@ type ProductService interface {
 
 	//DeductStock reduces the stock of a product when an order is placed
 	// this is a core business rule, we muust check stock before deducint
+	DeductStock(productID int64, quantity int32) error 
 }
