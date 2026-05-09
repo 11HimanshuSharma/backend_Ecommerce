@@ -5,6 +5,7 @@ package response
 import (
 	"encoding/json"
 	"net/http"
+	"ecommerce/pkg/apperror"
 )
 
 
@@ -24,8 +25,17 @@ func JSON(w http.ResponseWriter, status int, data interface{}) {
 	}
 }
 
-// Error sends a standardized JSON error response
 
-func Error(w http.ResponseWriter, status int, message string){
-	JSON(w, status, map[string]string{"error": message})
+func HandleError(w http.ResponseWriter, err error) {
+	if appErr, ok := err.(*apperror.AppError); ok {
+		JSON(w, appErr.HTTPStatus(), map[string] string{
+			"code": appErr.Code,
+			"message": appErr.Message,
+		})
+		return
+	}
+	JSON(w, http.StatusInternalServerError, map[string]string{
+		"code": "INTERNAL_ERROR",
+		"message": "An unexpected error occurred",
+	})
 }

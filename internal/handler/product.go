@@ -13,7 +13,7 @@ type ProductHandler struct {
 	svc service.ProductService
 }
 
-func NewProductHandler(svc service.ProductService) *ProductHandler {
+func NewProductHanler(svc service.ProductService) *ProductHandler {
 	return &ProductHandler{svc: svc}
 }
 
@@ -23,9 +23,9 @@ func NewProductHandler(svc service.ProductService) *ProductHandler {
 
 type CreateProductRequest struct {
 	Name        string  `json:"name"`
-	Description string  `json:"description"`
+	Description string  `json: "description"`
 	Price       float64 `json:"price"`
-	Stock       int     `json:"stock"`
+	Stock       int32   `json:"stock"`
 }
 
 func (h *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {

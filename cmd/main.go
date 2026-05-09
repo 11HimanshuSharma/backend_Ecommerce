@@ -1,9 +1,7 @@
 package main
 
 import (
-	"ecommerce/internal/handler"
 	"ecommerce/internal/repository"
-	"ecommerce/internal/service"
 	"ecommerce/pkg/response"
 	"log"
 	"net/http"
@@ -16,7 +14,7 @@ func main() {
 	repo := repository.NewInMemoryProductRepo()
 
 	//service
-	svc := service.NewProductService(repo)
+	svc := service.NewProductservice(repo)
 
 	// handler
 	h := handler.NewProductHandler(svc)
@@ -28,7 +26,7 @@ func main() {
 	mux.HandleFunc("GET /products/{id}", h.GetProduct)
 
 	//2 . Define our Health check
-	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		response.JSON(w, http.StatusOK, map[string]string{
 			"Status":  "OK",
 			"message": "Stardard net/http server is running!",
