@@ -17,23 +17,20 @@ func NewProductHandler(svc service.ProductService) *ProductHandler {
 	return &ProductHandler{svc: svc}
 }
 
-
 // .... Request / Reponse DTOs------
 // why seperate structs? we dont want to expose internal fields like
 //CreateAt, or ID to the user when they create a product,
 
-
 type CreateProductRequest struct {
-	Name string `json:"name"`
-	Description string `json:"description"`
-	Price float64 `json:"price"`
-	Stock int `json:"stock"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	Stock       int     `json:"stock"`
 }
-
 
 func (h *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	var req CreateProductRequest
-	
+
 	//step 1: Decode json the request body into out struct
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		response.Error(w, http.StatusBadRequest, "Invalid request payload")
@@ -51,9 +48,9 @@ func (h *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ProductHandler) GetProduct(w http.ResponseWriter, r *http.Request) {
-	
+
 	idStr := r.PathValue("id")
-	id, err := strconv.ParseInt(idStr, 10 , 64)
+	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
 		response.Error(w, http.StatusBadRequest, "Invalid product ID")
 		return
