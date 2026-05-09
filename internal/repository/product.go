@@ -1,4 +1,4 @@
-package reposi
+package repository
 
 import "ecommerce/internal/models"
 

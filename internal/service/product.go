@@ -14,9 +14,9 @@ type ProductService interface {
 
 
 	//AddProduct creates a new product and it validates that price is positive
-	AddProduct(name, description string, price float64, stock int32) (*models.Product, error) 
+	AddProduct(name, description string, price float64, stock int) (*models.Product, error) 
 
 	//DeductStock reduces the stock of a product when an order is placed
 	// this is a core business rule, we muust check stock before deducint
-	DeductStock(productID int64, quantity int32) error 
+	DeductStock(productID int64, quantity int) error 
 }

@@ -20,7 +20,7 @@ type InMemoryProductRepo struct {
 
 
 //NewInMemoryProductRepo is a constructor function
-func NewInMemoryProductRepo() *InMemoryProductrepo {
+func NewInMemoryProductRepo() *InMemoryProductRepo {
 	return &InMemoryProductRepo{
 		products: make(map[int64]*models.Product),
 		nextID: 1,
