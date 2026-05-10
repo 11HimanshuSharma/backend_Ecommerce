@@ -7,6 +7,7 @@ import (
 
 	"ecommerce/internal/service"
 	"ecommerce/pkg/response"
+	"ecommerce/pkg/apperror"
 )
 
 type ProductHandler struct {
@@ -40,9 +41,9 @@ func (h *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	// step 2: call the service (business logic lives there, not here)
 	product, err := h.svc.AddProduct(req.Name, req.Description, req.Price, req.Stock)
 	if err != nil {
-		response.Error(w, http.StatusBadRequest, err.Error())
-		return
-	}
+        response.HandleError(w, err)
+        return
+    }
 
 	response.JSON(w, http.StatusCreated, product)
 }
@@ -57,7 +58,7 @@ func (h *ProductHandler) GetProduct(w http.ResponseWriter, r *http.Request) {
 	}
 	product, err := h.svc.GetProduct(id)
 	if err != nil {
-		response.Error(w, http.StatusNotFound, "Product not found")
+		response.HandleError(w, err)
 		return
 	}
 	response.JSON(w, http.StatusOK, product)

@@ -3,7 +3,7 @@ package service
 import (
 	"ecommerce/internal/models"
 	"ecommerce/internal/repository"
-	"errors"
+	"ecommerce/pkg/apperror"
 )
 
 // prpductServiceImpl holds out business logic and talks to any repository
@@ -30,11 +30,11 @@ func (s *productServiceImpl) ListProducts() ([]*models.Product, error) {
 func (s *productServiceImpl) AddProduct(name, description string, price float64, stock int) (*models.Product, error) {
 	// valid price
 	if price <= 0 {
-		return nil, errors.New("Price must be positive")
+		return nil, apperror.NewBadRequestError("INVALID_PRICE", "Price must be positive")
 	}
 	// valid stock
 	if stock < 0 {
-		return nil, errors.New("Stock cannot be negative")
+		return nil, apperror.NewBadRequestError("INVALID_STOCK", "Stock cannot be negative")
 	}
 	product := &models.Product{
 		Name:        name,
@@ -54,14 +54,14 @@ func (s *productServiceImpl) AddProduct(name, description string, price float64,
 
 func (s *productServiceImpl) DeductStock(productId int64, quantity int) error {
 	if quantity <= 0 {
-		return errors.New("Quantity must be positive")
+		return apperror.NewBadRequestError("INVALID_QUANTITY", "Quantity must be positive")
 	}
 	product, err := s.repo.GetByID(productId)
 	if err != nil {
 		return err
 	}
 	if product.Stock < quantity {
-		return errors.New("not enough stock available")
+		return apperror.NewConflict("INSUFFICIENT_STOCK", "Not enough stock available")
 	}
 	product.Stock -= quantity
 	return s.repo.Update(product)

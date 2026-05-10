@@ -3,6 +3,9 @@ package main
 import (
 	"ecommerce/internal/repository"
 	"ecommerce/pkg/response"
+	"ecommerce/internal/service"
+	"ecommerce/internal/handler"
+	"ecommerce/pkg/middleware"
 	"log"
 	"net/http"
 )
@@ -33,6 +36,15 @@ func main() {
 		})
 	})
 
+	// apply middleware
+	//ordres matters! outermost middleware runs first on the way IN.
+	// Request comes in: RequestID -> recovery -> logging -> handler
+	// response goes out : handler-> logging -> recovery -> requestId
+
+	var handler http.Handler = mux
+	handler = middleware.Logging(handler)
+	handler = middleware.Recovery(handler)
+	handler = middleware.RequestID(handler)
 	// start the server
 	port := ":8080"
 	log.Printf("Starting server on port %s", port)

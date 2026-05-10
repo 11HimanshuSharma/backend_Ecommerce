@@ -74,6 +74,25 @@ func NewConflict(code, message string) *AppError {
 	}
 }
 
+
 func NewInternalError(code, message string) *AppError {
 	return &AppError{Type: ErrorTypeInternal, Code: code, Message: message}
+}
+
+
+func NewNotFound(code, message string) *AppError {
+	return &AppError{
+		Type: ErrorTypeNotFound,
+		Code: code,
+		Message: message,
+	}
+}
+
+
+func NewInternal(code, message string) *AppError {
+	return &AppError{
+		Type: ErrorTypeInternal,
+		Code: code,
+		Message: message,
+	}
 }
