@@ -13,8 +13,25 @@ import (
 func main() {
 	//1 initialize go's stardard stream multiplexer
 
+	// updating cred to match local postgres
+	dbCfg := database.Config{
+		Host: "localhost",
+		Port: 5432,
+		User: "postgres",
+		Password: "password",
+		DBName: "ecommerce",
+		SSLMode: "disable",
+	}
+
+	db,err := database.Connect(dbCfg)
+	if err != nil {
+		log.Fatalf("Could not connect to database: %v", err)
+	}
+	defer db.Close() // make sure we close connection when main exits
+
 	// data
-	repo := repository.NewInMemoryProductRepo()
+	// repo := repository.NewInMemoryProductRepo()
+	repo := repository.NewPostgresProductRepo(db)
 
 	//service
 	svc := service.NewProductservice(repo)
